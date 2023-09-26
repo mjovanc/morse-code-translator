@@ -115,7 +115,6 @@ fn text_to_morse(text: &str, morse_data: &Vec<Morse>) -> String {
     let mut morse_code = String::new();
     
     let words: &Vec<_> = &text.split(' ').collect();
-    println!("args {:?}", words);
 
     //Check every word and see if it is a Prosign, if not, decode chars.
     for word in words {
@@ -123,7 +122,6 @@ fn text_to_morse(text: &str, morse_data: &Vec<Morse>) -> String {
         let mut prosign = false;
         for morse in morse_data.iter() {
             if new == morse.letter {
-                println!("Morse special character {:?}", &morse.letter);
                 morse_code.push_str(&morse.code);
                 prosign = true;
                 add_space(&mut morse_code);
