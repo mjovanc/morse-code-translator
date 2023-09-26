@@ -59,13 +59,13 @@ fn create_morse_code_data() -> Vec<Morse> {
         Morse::new("\"", ".-..-."),
         Morse::new("$", "...-..-"),
         Morse::new("@", ".--.-."),
-        // Morse::new("SK", "... -.-"),
-        // Morse::new("HH", ".... ...."),
-        // Morse::new("KN", "-.- -."),
-        // Morse::new("CT", "-.-. -"),
-        // Morse::new("RN", ".-. -."),
-        // Morse::new("AS", "... ... ... ..."),
-        // Morse::new("Wait", ".-- .- .. -"),
+        Morse::new("SK", "... -.-"),
+        Morse::new("HH", ".... ...."),
+        Morse::new("KN", "-.- -."),
+        Morse::new("CT", "-.-. -"),
+        Morse::new("RN", ".-. -."),
+        Morse::new("AS", "... ... ... ..."),
+        Morse::new("Wait", ".-- .- .. -"),
         Morse::new("à", ".--.-"),
         Morse::new("ä", ".-.-"),
         Morse::new("å", ".--.-"),
@@ -110,18 +110,45 @@ fn char_to_morse(c: char, morse_data: &Vec<Morse>) -> Option<&str> {
     None
 }
 
+
 fn text_to_morse(text: &str, morse_data: &Vec<Morse>) -> String {
     let mut morse_code = String::new();
+    
+    let words: &Vec<_> = &text.split(' ').collect();
 
-    for c in text.chars() {
-        if let Some(code) = char_to_morse(c, morse_data) {
-            morse_code.push_str(code);
-            morse_code.push(' ');
-        } else {
-            morse_code.push('?');
-            morse_code.push(' ');
+    //Check every word and see if it is a Prosign, if not, decode chars.
+    for word in words {
+        let new = word.to_string();
+        let mut prosign = false;
+        for morse in morse_data.iter() {
+            if new == morse.letter {
+                morse_code.push_str(&morse.code);
+                prosign = true;
+                add_space(&mut morse_code);
+            }
+    
+        }
+
+        if prosign == true { continue ;}
+        let word = word.to_lowercase();
+        //Decode chars
+        for c in word.chars() {
+            if let Some(code) = char_to_morse(c, morse_data) {
+                morse_code.push_str(code);
+                morse_code.push(' ');
+            }
+        }
+        
+        //Add space after word is processed
+        add_space(&mut morse_code);
+
+        fn add_space(morse_code: &mut String) {
+            for i in 0..7 {
+                morse_code.push(' ');
+            }
         }
     }
+
 
     morse_code
         .trim_matches(|c| c == '"' || c == '\'')
