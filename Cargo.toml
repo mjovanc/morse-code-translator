@@ -1,0 +1,7 @@
+[package]
+name = "morse-code-translator"
+description = "A simple morse code translator in Rust."
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
