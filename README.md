@@ -3,7 +3,7 @@ A simple morse code translator in Rust.
 
 ## How to use
 
-Simply download the binary from the release tab and run it:
+Simply download the the code, build and run the binary using:
 
 ```
 ./mct --text SOS
