@@ -110,6 +110,59 @@ fn char_to_morse(c: char, morse_data: &Vec<Morse>) -> Option<&str> {
     None
 }
 
+fn morse_to_char(m: String, morse_data: &Vec<Morse>) -> Option<&str> {
+    for morse in morse_data.iter() {
+        if morse.code == m {
+            return Some(&morse.letter);
+        }
+    }
+    None
+}
+
+fn morse_to_text(text: &str, morse_data: &Vec<Morse>) -> String {
+    let mut plain_text = String::new();
+    
+    let words: &Vec<_> = &text.split("       ").collect();
+    //Check every word and see if it is a Prosign, if not, decode chars.
+    for word in words {
+        let new = word.trim_start().to_string();
+        let mut prosign = false;
+           
+        for morse in morse_data.iter() {
+            if new == morse.code.to_string() {
+                plain_text.push_str(&morse.letter);
+                prosign = true;
+                add_space(&mut plain_text);
+            }
+    
+        }
+
+        if prosign == true { continue ;}
+        // let word = word.to_lowercase();
+        let morse_coded: &Vec<_> = &word.split(" ").collect();
+        //Decode chars
+        for c in morse_coded {
+            if c.to_string().len() == 0 {
+                continue;
+            }
+
+            if let Some(letter) = morse_to_char(c.to_string(), morse_data) {
+                plain_text.push_str(letter);
+            }
+        }
+        
+        add_space(&mut plain_text);
+
+        fn add_space(plain_text: &mut String) {
+                plain_text.push(' ');
+        }
+    }
+
+
+    plain_text
+        .to_string()
+}
+
 
 fn text_to_morse(text: &str, morse_data: &Vec<Morse>) -> String {
     let mut morse_code = String::new();
@@ -172,6 +225,7 @@ fn main() {
 
     let text = &args[2];
     let morse_code_text = &text_to_morse(text, &morse_data);
-
+    let plain_text = &morse_to_text(morse_code_text, &morse_data);
+    println!("{}", plain_text);
     println!("{}", morse_code_text);
 }
