@@ -68,13 +68,13 @@ fn create_morse_code_data() -> Vec<Morse> {
         Morse::new("\"", ".-..-."),
         Morse::new("$", "...-..-"),
         Morse::new("@", ".--.-."),
-        Morse::new("$", "-...-"),  // prosigns
-        Morse::new("$", ".-.-."),  // prosigns
-        Morse::new("$", ".-...-"), // prosigns
-        Morse::new("$", ".-..."),  // prosigns
-        Morse::new("$", "-.-."),   // prosigns
-        Morse::new("$", "-.-.-"),  // prosigns
-        Morse::new("$", ".-.-"),   // prosigns
+        Morse::new("SK", "... -.-"),
+        Morse::new("HH", ".... ...."),
+        Morse::new("KN", "-.- -."),
+        Morse::new("CT", "-.-. -"),
+        Morse::new("RN", ".-. -."),
+        Morse::new("AS", "... ... ... ..."),
+        Morse::new("Wait", ".-- .- .. -"),
         Morse::new("à", ".--.-"),
         Morse::new("ä", ".-.-"),
         Morse::new("å", ".--.-"),
@@ -111,6 +111,8 @@ fn create_morse_code_data() -> Vec<Morse> {
 }
 
 fn main() {
+    // take text input to generate morse code from
+
     let code_data: Vec<Morse> = create_morse_code_data();
 
     println!("{:?}", code_data);
