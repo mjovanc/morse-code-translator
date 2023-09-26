@@ -4,4 +4,8 @@ description = "A simple morse code translator in Rust."
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "mct"
+path = "src/main.rs"
+
 [dependencies]

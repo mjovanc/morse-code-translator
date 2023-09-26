@@ -1,17 +1,8 @@
-#[derive(Hash, Eq, PartialEq, Debug)]
-struct Morse {
-    letter: String,
-    code: String,
-}
+use std::env;
 
-impl Morse {
-    fn new(letter: &str, code: &str) -> Morse {
-        Morse {
-            letter: letter.to_string(),
-            code: code.to_string(),
-        }
-    }
-}
+mod morse;
+
+use morse::Morse;
 
 fn create_morse_code_data() -> Vec<Morse> {
     vec![
@@ -68,13 +59,13 @@ fn create_morse_code_data() -> Vec<Morse> {
         Morse::new("\"", ".-..-."),
         Morse::new("$", "...-..-"),
         Morse::new("@", ".--.-."),
-        Morse::new("SK", "... -.-"),
-        Morse::new("HH", ".... ...."),
-        Morse::new("KN", "-.- -."),
-        Morse::new("CT", "-.-. -"),
-        Morse::new("RN", ".-. -."),
-        Morse::new("AS", "... ... ... ..."),
-        Morse::new("Wait", ".-- .- .. -"),
+        // Morse::new("SK", "... -.-"),
+        // Morse::new("HH", ".... ...."),
+        // Morse::new("KN", "-.- -."),
+        // Morse::new("CT", "-.-. -"),
+        // Morse::new("RN", ".-. -."),
+        // Morse::new("AS", "... ... ... ..."),
+        // Morse::new("Wait", ".-- .- .. -"),
         Morse::new("à", ".--.-"),
         Morse::new("ä", ".-.-"),
         Morse::new("å", ".--.-"),
@@ -110,10 +101,50 @@ fn create_morse_code_data() -> Vec<Morse> {
     ]
 }
 
+fn char_to_morse(c: char, morse_data: &Vec<Morse>) -> Option<&str> {
+    for morse in morse_data.iter() {
+        if morse.letter.chars().next() == Some(c) {
+            return Some(&morse.code);
+        }
+    }
+    None
+}
+
+fn text_to_morse(text: &str, morse_data: &Vec<Morse>) -> String {
+    let mut morse_code = String::new();
+
+    for c in text.chars() {
+        if let Some(code) = char_to_morse(c, morse_data) {
+            morse_code.push_str(code);
+            morse_code.push(' ');
+        } else {
+            morse_code.push('?');
+            morse_code.push(' ');
+        }
+    }
+
+    morse_code
+        .trim_matches(|c| c == '"' || c == '\'')
+        .to_string()
+}
+
 fn main() {
-    // take text input to generate morse code from
+    let args: Vec<String> = env::args().collect();
+    let morse_data: Vec<Morse> = create_morse_code_data();
 
-    let code_data: Vec<Morse> = create_morse_code_data();
+    if args.len() != 3 {
+        eprintln!("Usage: {} (--text|-t) <text>", args[0]);
+        std::process::exit(1);
+    }
 
-    println!("{:?}", code_data);
+    let option = &args[1];
+    if option != "--text" && option != "-t" {
+        eprintln!("Usage: {} (--text|-t) <text>", args[0]);
+        std::process::exit(1);
+    }
+
+    let text = &args[2];
+    let morse_code_text = &text_to_morse(text, &morse_data);
+
+    println!("{}", morse_code_text);
 }
